@@ -46,8 +46,8 @@ export function HeroContent() {
         variants={itemVariants}
         className="max-w-xl text-lg leading-relaxed text-slate-500"
       >
-        POS, inventory, procurement, finance, people and customer operations —
-        connected in one intelligent platform.
+        POS, payments, ordering, inventory, procurement, finance and AI —
+        connected in one intelligent restaurant operating system.
       </motion.p>
 
       <motion.div

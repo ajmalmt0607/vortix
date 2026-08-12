@@ -1,14 +1,32 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Container } from "../ui/Container";
 import { Logo } from "../ui/Logo";
 import { Button } from "../ui/Button";
 import { MobileMenu } from "./MobileMenu";
+import { PlatformMegaMenu } from "./PlatformMegaMenu";
 import { navLinks } from "../../data/navLinks";
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const closeTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const openMenu = (label: string) => {
+    if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    setActiveMenu(label);
+  };
+
+  const scheduleClose = () => {
+    closeTimeout.current = setTimeout(() => setActiveMenu(null), 150);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeout.current) clearTimeout(closeTimeout.current);
+    };
+  }, []);
 
   return (
     <motion.header
@@ -17,20 +35,25 @@ export function Navbar() {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className="sticky top-0 z-50 bg-white/90 backdrop-blur-md"
     >
-      <div className="border-b border-ink/8">
+      <div className="relative border-b border-ink/8">
         <Container>
           <div className="flex h-20 items-center justify-between">
             <Logo />
 
             <nav aria-label="Primary" className="hidden lg:flex lg:items-center lg:gap-9">
               {navLinks.map((link) => (
-                <a
+                <div
                   key={link.href}
-                  href={link.href}
-                  className="text-sm font-medium text-ink/70 transition-colors hover:text-ink"
+                  onMouseEnter={() => link.megaMenu && openMenu(link.label)}
+                  onMouseLeave={() => link.megaMenu && scheduleClose()}
                 >
-                  {link.label}
-                </a>
+                  <a
+                    href={link.href}
+                    className="text-sm font-medium text-ink/70 transition-colors hover:text-ink"
+                  >
+                    {link.label}
+                  </a>
+                </div>
               ))}
             </nav>
 
@@ -58,6 +81,14 @@ export function Navbar() {
             </button>
           </div>
         </Container>
+
+        <AnimatePresence>
+          {activeMenu === "Platform" && (
+            <div onMouseEnter={() => openMenu("Platform")} onMouseLeave={scheduleClose}>
+              <PlatformMegaMenu />
+            </div>
+          )}
+        </AnimatePresence>
       </div>
 
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} />

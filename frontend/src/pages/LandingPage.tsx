@@ -1,10 +1,12 @@
 import { Navbar } from "../components/layout/Navbar";
+import { Footer } from "../components/layout/Footer";
 import { Hero } from "../components/sections/Hero";
 import { Modules } from "../components/sections/Modules";
 // import { HowItWorks } from "../components/sections/HowItWorks";
 import { ConnectedPlatform } from "../components/sections/ConnectedPlatform";
 import { AICopilot } from "../components/sections/AICopilot";
 import { CommandCenter } from "../components/sections/CommandCenter";
+import { CTA } from "../components/sections/CTA";
 
 export function LandingPage() {
   return (
@@ -17,7 +19,9 @@ export function LandingPage() {
         <CommandCenter />
         {/* <HowItWorks /> */}
         <ConnectedPlatform />
+        <CTA />
       </main>
+      <Footer />
     </>
   );
 }
